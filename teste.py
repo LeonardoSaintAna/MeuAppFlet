@@ -4,17 +4,19 @@ import flet as ft
 def main(page: ft.Page):
     page.title = "Smart Home"
 
-    # 📱 FORÇA MODO MOBILE REAL
-    page.padding = 10
+    # 📱 base mobile segura
     page.bgcolor = "#0F172A"
+    page.padding = 0
+
+    # 🔥 evita scroll bugado no Android 0.22
     page.scroll = None
 
     # -----------------------
-    # Sensores
+    # SENSOR DATA
     # -----------------------
-    temperatura = ft.Text("24 °C", color="white", weight=ft.FontWeight.BOLD)
-    umidade = ft.Text("65 %", color="white", weight=ft.FontWeight.BOLD)
-    distancia = ft.Text("120 cm", color="white", weight=ft.FontWeight.BOLD)
+    temperatura = ft.Text("24 °C", color="white", size=14, weight=ft.FontWeight.BOLD)
+    umidade = ft.Text("65 %", color="white", size=14, weight=ft.FontWeight.BOLD)
+    distancia = ft.Text("120 cm", color="white", size=14, weight=ft.FontWeight.BOLD)
 
     def mudar_status(e):
         page.update()
@@ -24,13 +26,14 @@ def main(page: ft.Page):
     tomada_cozinha = ft.Switch(active_color="#EF4444", on_change=mudar_status)
 
     # -----------------------
-    # CARD
+    # CARD BASE (NUNCA SAI DA TELA)
     # -----------------------
     def card(content):
         return ft.Container(
-            padding=15,
+            width=360,  # 📱 LIMITE FIXO DE CELULAR (evita overflow)
+            padding=12,
             margin=ft.margin.only(bottom=12),
-            border_radius=16,
+            border_radius=14,
             bgcolor="#1E293B",
             content=content,
         )
@@ -41,8 +44,8 @@ def main(page: ft.Page):
     header = card(
         ft.Column(
             [
-                ft.Text("🏠 Smart Home", size=22, color="#38BDF8", weight=ft.FontWeight.BOLD),
-                ft.Text("Controle residencial inteligente", color="#94A3B8"),
+                ft.Text("🏠 Smart Home", size=20, color="#38BDF8", weight=ft.FontWeight.BOLD),
+                ft.Text("Controle residencial", size=11, color="#94A3B8"),
             ],
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
         )
@@ -54,12 +57,20 @@ def main(page: ft.Page):
     sensores = card(
         ft.Column(
             [
-                ft.Text("📡 Sensores", size=18, color="#38BDF8", weight=ft.FontWeight.BOLD),
+                ft.Text("📡 Sensores", size=16, color="#38BDF8", weight=ft.FontWeight.BOLD),
                 ft.Divider(color="#334155"),
 
-                ft.Row([ft.Text("Temperatura", color="white"), ft.Container(expand=True), temperatura]),
-                ft.Row([ft.Text("Umidade", color="white"), ft.Container(expand=True), umidade]),
-                ft.Row([ft.Text("Distância", color="white"), ft.Container(expand=True), distancia]),
+                ft.Row(
+                    [ft.Text("Temp", color="white", size=13), ft.Container(expand=True), temperatura]
+                ),
+
+                ft.Row(
+                    [ft.Text("Umid", color="white", size=13), ft.Container(expand=True), umidade]
+                ),
+
+                ft.Row(
+                    [ft.Text("Dist", color="white", size=13), ft.Container(expand=True), distancia]
+                ),
             ]
         )
     )
@@ -70,37 +81,47 @@ def main(page: ft.Page):
     tomadas = card(
         ft.Column(
             [
-                ft.Text("🔌 Tomadas", size=18, color="#38BDF8", weight=ft.FontWeight.BOLD),
+                ft.Text("🔌 Tomadas", size=16, color="#38BDF8", weight=ft.FontWeight.BOLD),
                 ft.Divider(color="#334155"),
 
-                ft.Row([ft.Text("Sala", color="white"), ft.Container(expand=True), tomada_sala]),
+                ft.Row(
+                    [ft.Text("Sala", color="white", size=14), ft.Container(expand=True), tomada_sala]
+                ),
+
                 ft.Divider(height=1, color="#334155"),
 
-                ft.Row([ft.Text("Quarto", color="white"), ft.Container(expand=True), tomada_quarto]),
+                ft.Row(
+                    [ft.Text("Quarto", color="white", size=14), ft.Container(expand=True), tomada_quarto]
+                ),
+
                 ft.Divider(height=1, color="#334155"),
 
-                ft.Row([ft.Text("Cozinha", color="white"), ft.Container(expand=True), tomada_cozinha]),
+                ft.Row(
+                    [ft.Text("Cozinha", color="white", size=14), ft.Container(expand=True), tomada_cozinha]
+                ),
             ]
         )
     )
 
     # -----------------------
-    # 🔥 ROOT FIX ANDROID (ESSENCIAL)
+    # 📱 ROOT CENTRALIZADO (SEM VAZAMENTO)
     # -----------------------
-    root = ft.Container(
-        expand=True,
-        content=ft.ListView(
-            expand=True,
-            spacing=10,
-            controls=[
-                header,
-                sensores,
-                tomadas,
-            ],
-        ),
+    page.add(
+        ft.Container(
+            width=420,
+            alignment=ft.alignment.top_center,
+            padding=10,
+            content=ft.Column(
+                controls=[
+                    header,
+                    sensores,
+                    tomadas,
+                ],
+                spacing=10,
+                scroll=ft.ScrollMode.AUTO,
+            ),
+        )
     )
-
-    page.add(root)
 
 
 ft.app(target=main)
