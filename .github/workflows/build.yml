@@ -24,9 +24,8 @@ jobs:
         with:
           flutter-version: "3.24.0"
 
-      - name: Disable interactive prompts
-        run: |
-          echo "FLET_FORCE_NON_INTERACTIVE=1" >> $GITHUB_ENV
+      - name: Force non-interactive mode
+        run: echo "FLET_FORCE_NON_INTERACTIVE=1" >> $GITHUB_ENV
 
       - name: Build APK
         run: flet build apk --module-name teste --yes --verbose
