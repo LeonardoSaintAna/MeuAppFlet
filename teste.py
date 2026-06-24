@@ -4,11 +4,11 @@ import flet as ft
 def main(page: ft.Page):
     page.title = "Smart Home"
 
-    # 📱 base mobile segura
+    # 📱 base mobile
     page.bgcolor = "#0F172A"
-    page.padding = 0
+    page.padding = 10
 
-    # 🔥 evita scroll bugado no Android 0.22
+    # 🔥 IMPORTANTE: NÃO use page.scroll nem Column scroll aqui
     page.scroll = None
 
     # -----------------------
@@ -26,11 +26,10 @@ def main(page: ft.Page):
     tomada_cozinha = ft.Switch(active_color="#EF4444", on_change=mudar_status)
 
     # -----------------------
-    # CARD BASE (NUNCA SAI DA TELA)
+    # CARD BASE
     # -----------------------
     def card(content):
         return ft.Container(
-            width=360,  # 📱 LIMITE FIXO DE CELULAR (evita overflow)
             padding=12,
             margin=ft.margin.only(bottom=12),
             border_radius=14,
@@ -59,18 +58,9 @@ def main(page: ft.Page):
             [
                 ft.Text("📡 Sensores", size=16, color="#38BDF8", weight=ft.FontWeight.BOLD),
                 ft.Divider(color="#334155"),
-
-                ft.Row(
-                    [ft.Text("Temp", color="white", size=13), ft.Container(expand=True), temperatura]
-                ),
-
-                ft.Row(
-                    [ft.Text("Umid", color="white", size=13), ft.Container(expand=True), umidade]
-                ),
-
-                ft.Row(
-                    [ft.Text("Dist", color="white", size=13), ft.Container(expand=True), distancia]
-                ),
+                ft.Row([ft.Text("Temp", color="white"), ft.Container(expand=True), temperatura]),
+                ft.Row([ft.Text("Umid", color="white"), ft.Container(expand=True), umidade]),
+                ft.Row([ft.Text("Dist", color="white"), ft.Container(expand=True), distancia]),
             ]
         )
     )
@@ -83,43 +73,26 @@ def main(page: ft.Page):
             [
                 ft.Text("🔌 Tomadas", size=16, color="#38BDF8", weight=ft.FontWeight.BOLD),
                 ft.Divider(color="#334155"),
-
-                ft.Row(
-                    [ft.Text("Sala", color="white", size=14), ft.Container(expand=True), tomada_sala]
-                ),
-
+                ft.Row([ft.Text("Sala", color="white"), ft.Container(expand=True), tomada_sala]),
                 ft.Divider(height=1, color="#334155"),
-
-                ft.Row(
-                    [ft.Text("Quarto", color="white", size=14), ft.Container(expand=True), tomada_quarto]
-                ),
-
+                ft.Row([ft.Text("Quarto", color="white"), ft.Container(expand=True), tomada_quarto]),
                 ft.Divider(height=1, color="#334155"),
-
-                ft.Row(
-                    [ft.Text("Cozinha", color="white", size=14), ft.Container(expand=True), tomada_cozinha]
-                ),
+                ft.Row([ft.Text("Cozinha", color="white"), ft.Container(expand=True), tomada_cozinha]),
             ]
         )
     )
 
     # -----------------------
-    # 📱 ROOT CENTRALIZADO (SEM VAZAMENTO)
+    # 🔥 ROOT (VERSÃO QUE FUNCIONA NO ANDROID 0.22.1)
     # -----------------------
     page.add(
-        ft.Container(
-            width=420,
-            alignment=ft.alignment.top_center,
-            padding=10,
-            content=ft.Column(
-                controls=[
-                    header,
-                    sensores,
-                    tomadas,
-                ],
-                spacing=10,
-                scroll=ft.ScrollMode.AUTO,
-            ),
+        ft.Column(
+            expand=True,
+            controls=[
+                header,
+                sensores,
+                tomadas,
+            ],
         )
     )
 
