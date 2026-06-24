@@ -1,0 +1,12 @@
+[project]
+name = "teste"
+version = "0.1.0"
+
+dependencies = [
+    "flet"
+]
+
+[tool.flet]
+product = "Meu App"
+company = "Leonardo"
+org = "com.leonardo"
