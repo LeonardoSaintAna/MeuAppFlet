@@ -30,13 +30,14 @@ jobs:
           channel: stable
           flutter-version: "3.24.0"
 
-      - name: Forçar modo não interativo
+      - name: Modo não interativo
         run: echo "FLET_FORCE_NON_INTERACTIVE=1" >> $GITHUB_ENV
 
-      # 🔥 IMPORTANTE: corrigido aqui
+      # 🔥 AQUI ESTÁ A CORREÇÃO
       - name: Build APK
         run: |
           flet build apk \
+            --module-name teste \
             --source . \
             --verbose \
             --yes
