@@ -1,4 +1,4 @@
-name: Build APK (Flet)
+name: Build APK (Flet Stable)
 
 on:
   workflow_dispatch:
@@ -16,19 +16,25 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar dependências Python
-        run: pip install flet
+      - name: Instalar dependências
+        run: pip install flet==0.85.3
 
-      - name: Instalar Flutter FIXO
+      - name: Instalar Flutter fixo
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.24.0"
 
-      - name: Gerar projeto Flutter via Flet
-        run: flet build apk --module-name teste --verbose --no-analytics
+      - name: Desativar prompts interativos (CRÍTICO)
+        run: echo "FLET_FORCE_NON_INTERACTIVE=1" >> $GITHUB_ENV
+
+      - name: Verificar Flutter
+        run: flutter doctor -v
+
+      - name: Build APK (modo correto)
+        run: python -m flet build apk --module-name teste --verbose --no-analytics
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: apk
-          path: build/apk/*.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
