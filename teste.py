@@ -4,11 +4,9 @@ import flet as ft
 def main(page: ft.Page):
     page.title = "Smart Home"
 
-    # 🌙 fundo
-    page.bgcolor = "#0F172A"
+    # 📱 FORÇA MODO MOBILE REAL
     page.padding = 10
-
-    # 🔥 IMPORTANTE: garante render no mobile
+    page.bgcolor = "#0F172A"
     page.scroll = None
 
     # -----------------------
@@ -18,9 +16,6 @@ def main(page: ft.Page):
     umidade = ft.Text("65 %", color="white", weight=ft.FontWeight.BOLD)
     distancia = ft.Text("120 cm", color="white", weight=ft.FontWeight.BOLD)
 
-    # -----------------------
-    # Switch
-    # -----------------------
     def mudar_status(e):
         page.update()
 
@@ -29,7 +24,7 @@ def main(page: ft.Page):
     tomada_cozinha = ft.Switch(active_color="#EF4444", on_change=mudar_status)
 
     # -----------------------
-    # CARD PADRÃO
+    # CARD
     # -----------------------
     def card(content):
         return ft.Container(
@@ -62,9 +57,9 @@ def main(page: ft.Page):
                 ft.Text("📡 Sensores", size=18, color="#38BDF8", weight=ft.FontWeight.BOLD),
                 ft.Divider(color="#334155"),
 
-                ft.Row([ft.Icon(ft.icons.THERMOSTAT, color="#F97316"), ft.Text("Temperatura", color="white"), ft.Container(expand=True), temperatura]),
-                ft.Row([ft.Icon(ft.icons.WATER_DROP, color="#22C55E"), ft.Text("Umidade", color="white"), ft.Container(expand=True), umidade]),
-                ft.Row([ft.Icon(ft.icons.STRAIGHTEN, color="#38BDF8"), ft.Text("Distância", color="white"), ft.Container(expand=True), distancia]),
+                ft.Row([ft.Text("Temperatura", color="white"), ft.Container(expand=True), temperatura]),
+                ft.Row([ft.Text("Umidade", color="white"), ft.Container(expand=True), umidade]),
+                ft.Row([ft.Text("Distância", color="white"), ft.Container(expand=True), distancia]),
             ]
         )
     )
@@ -90,24 +85,22 @@ def main(page: ft.Page):
     )
 
     # -----------------------
-    # 🔥 ROOT (ISS OQUE FAZ FUNCIONAR NO CELULAR)
+    # 🔥 ROOT FIX ANDROID (ESSENCIAL)
     # -----------------------
-    page.add(
-        ft.SafeArea(
-            content=ft.Container(
-                expand=True,
-                content=ft.ListView(
-                    expand=True,
-                    spacing=10,
-                    controls=[
-                        header,
-                        sensores,
-                        tomadas,
-                    ],
-                ),
-            )
-        )
+    root = ft.Container(
+        expand=True,
+        content=ft.ListView(
+            expand=True,
+            spacing=10,
+            controls=[
+                header,
+                sensores,
+                tomadas,
+            ],
+        ),
     )
+
+    page.add(root)
 
 
 ft.app(target=main)
