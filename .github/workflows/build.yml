@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar Flet
+      - name: Instalar dependências
         run: |
           python -m pip install --upgrade pip
           pip install flet
@@ -30,24 +30,24 @@ jobs:
           channel: stable
           flutter-version: "3.24.0"
 
-      - name: Modo não interativo
+      - name: Forçar modo não interativo
         run: echo "FLET_FORCE_NON_INTERACTIVE=1" >> $GITHUB_ENV
 
-      - name: Gerar APK
+      # 🔥 IMPORTANTE: corrigido aqui
+      - name: Build APK
         run: |
           flet build apk \
-            --module-name teste \
-            --yes \
-            --verbose
+            --source . \
+            --verbose \
+            --yes
 
-      - name: Verificar arquivos gerados
+      - name: Listar arquivos gerados
         run: |
-          echo "Conteúdo da pasta build:"
-          find build -type f
+          find build -type f || true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: MeuAppFlet-APK
+          name: SmartHome-APK
           path: build/apk/*.apk
           if-no-files-found: error
